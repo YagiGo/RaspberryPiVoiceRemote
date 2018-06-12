@@ -8,6 +8,6 @@ This is an IoT project which uses alexa to control general home appliances.The p
 * Easy to Implement Home Appliances, even some that are not IoT Compatible
 
 ### Server Side 
-The server side provides RESTful API for the application to call. 
+The server side provides RESTful API for the application to call.  
 https://github.com/sonicyang/ir_remote for more details.
 
