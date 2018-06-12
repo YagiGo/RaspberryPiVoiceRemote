@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp">
 
     <ImageButton
         android:id="@+id/button_tv_power_off"
@@ -20,51 +21,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="124dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_tv_power_off"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_tv_power_off"
         app:srcCompat="@drawable/ic_volume_off" />
 
     <ImageButton
         android:id="@+id/button_tv_vol_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/button_tv_previous"
-        app:layout_constraintStart_toEndOf="@+id/button_tv_previous"
+        app:layout_constraintStart_toStartOf="@+id/button_tv_mute"
+        app:layout_constraintTop_toBottomOf="@+id/button_tv_mute"
         app:srcCompat="@drawable/ic_volume_plus" />
 
     <ImageButton
         android:id="@+id/button_tv_vol_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/button_tv_previous"
-        app:layout_constraintTop_toBottomOf="@+id/button_tv_previous"
-        app:srcCompat="@drawable/ic_volume_minus" />
-
-    <ImageButton
-        android:id="@+id/button_tv_previous"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="184dp"
-        android:layout_marginStart="120dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_skip_previous" />
-
-    <ImageButton
-        android:id="@+id/button_tv_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/button_tv_vol_down"
+        app:layout_constraintStart_toStartOf="@+id/button_tv_vol_up"
         app:layout_constraintTop_toBottomOf="@+id/button_tv_vol_up"
-        app:srcCompat="@drawable/ic_skip_next" />
+        app:srcCompat="@drawable/ic_volume_minus" />
 
     <ImageButton
         android:id="@+id/button_tv_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/button_tv_previous"
-        app:layout_constraintTop_toTopOf="@+id/button_tv_previous"
+        app:layout_constraintStart_toStartOf="@+id/button_tv_down"
+        app:layout_constraintTop_toTopOf="@+id/button_tv_left"
         app:srcCompat="@drawable/ic_menu" />
 
     <ImageView
@@ -76,5 +59,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_tv_24px" />
+
+    <ImageButton
+        android:id="@+id/button_tv_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/button_tv_down"
+        app:layout_constraintEnd_toStartOf="@+id/button_tv_down"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_24px" />
+
+    <ImageButton
+        android:id="@+id/button_tv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/button_tv_down"
+        app:layout_constraintTop_toTopOf="@+id/button_tv_menu"
+        app:srcCompat="@drawable/ic_baseline_arrow_forward_24px" />
+
+    <ImageButton
+        android:id="@+id/button_tv_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/button_tv_left"
+        app:layout_constraintStart_toEndOf="@+id/button_tv_left"
+        app:srcCompat="@drawable/ic_baseline_arrow_upward_24px" />
+
+    <ImageButton
+        android:id="@+id/button_tv_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="117dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_baseline_arrow_downward_24px" />
 
 </android.support.constraint.ConstraintLayout>

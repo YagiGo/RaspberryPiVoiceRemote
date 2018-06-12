@@ -1,8 +1,6 @@
 package com.example.zhaoxinwu.remote;
 
 import android.content.Context;
-import android.media.Image;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,16 +8,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONObject;
 
 
 public class TVActivity extends AppCompatActivity {
@@ -36,8 +30,10 @@ public class TVActivity extends AppCompatActivity {
         ImageButton buttonMenu = findViewById(R.id.button_tv_menu);
         ImageButton buttonVolumeUp = findViewById(R.id.button_tv_vol_up);
         ImageButton buttonVolumeDown = findViewById(R.id.button_tv_vol_down);
-        ImageButton buttonPreviousChannel = findViewById(R.id.button_tv_previous);
-        ImageButton buttonNextChannel = findViewById(R.id.button_tv_next);
+        ImageButton buttonLeft = findViewById(R.id.button_tv_left);
+        ImageButton buttonRight = findViewById(R.id.button_tv_right);
+        ImageButton buttonUp = findViewById(R.id.button_tv_up);
+        ImageButton buttonDown = findViewById(R.id.button_tv_down);
 
         buttonPower.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,20 +95,35 @@ public class TVActivity extends AppCompatActivity {
 
             }
         });
-        buttonPreviousChannel.setOnClickListener(new View.OnClickListener() {
+        buttonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Back to previous channel", Toast.LENGTH_SHORT).show();
                 sendRequest(queue, urlTV, "KEY_LEFT");
             }
         });
-        buttonNextChannel.setOnClickListener(new View.OnClickListener() {
+        buttonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Next channel", Toast.LENGTH_SHORT).show();
                 sendRequest(queue, urlTV, "KEY_RIGHT");
             }
         });
+        buttonUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Next channel", Toast.LENGTH_SHORT).show();
+                sendRequest(queue, urlTV, "KEY_UP");
+            }
+        });
+        buttonDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Next channel", Toast.LENGTH_SHORT).show();
+                sendRequest(queue, urlTV, "KEY_DOWN");
+            }
+        });
+
     }
 
     @Override
