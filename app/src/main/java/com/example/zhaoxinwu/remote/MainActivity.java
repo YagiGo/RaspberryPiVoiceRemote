@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         acRemoteSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LampActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ACActivity.class);
                 startActivity(intent);
             }
         });
