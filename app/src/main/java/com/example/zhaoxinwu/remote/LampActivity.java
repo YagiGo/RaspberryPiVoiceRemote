@@ -16,6 +16,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.jakewharton.rxbinding2.view.RxView;
+
+import java.util.concurrent.TimeUnit;
 
 public class LampActivity extends AppCompatActivity {
 
@@ -32,41 +35,32 @@ public class LampActivity extends AppCompatActivity {
         Button buttonWarmLight = findViewById(R.id.button_lamp_warm);
         Button buttonColdLight = findViewById(R.id.button_lamp_cold);
 
-        buttonPower.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Lamp will be powered on/off", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlLamp, "KEY_POWER");
-            }
+        final String urlLamp = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000/remote/iris_oyama.light/";
+        RxView.clicks(buttonPower).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
+            Toast.makeText(context, "Lamp will be powered on/off", Toast.LENGTH_SHORT).show();
+            sendRequest(queue, urlLamp, "KEY_POWER");
         });
-        buttonBrightlessUP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Lamp will be brighter", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlLamp, "KEY_BRIGHTNESSUP");
-            }
+
+        RxView.clicks(buttonBrightlessUP).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
+            Toast.makeText(context, "Lamp will be brighter", Toast.LENGTH_SHORT).show();
+            sendRequest(queue, urlLamp, "KEY_BRIGHTNESSUP");
         });
-        buttonBrightlessDOWN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Lamp will be dimmer", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlLamp, "KEY_BRIGHTNESSDOWN");
-            }
+
+        RxView.clicks(buttonBrightlessDOWN).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
+            Toast.makeText(context, "Lamp will be dimmer", Toast.LENGTH_SHORT).show();
+            sendRequest(queue, urlLamp, "KEY_BRIGHTNESSDOWN");
         });
-        buttonWarmLight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Warm Light!", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlLamp, "KEY_RED");
-            }
+
+        RxView.clicks(buttonWarmLight).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
+            Toast.makeText(context, "Warm Light!", Toast.LENGTH_SHORT).show();
+            sendRequest(queue, urlLamp, "KEY_RED");
         });
-        buttonColdLight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Cold Light", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlLamp, "KEY_BLUE");
-            }
+
+        RxView.clicks(buttonColdLight).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
+            Toast.makeText(context, "Cold Light", Toast.LENGTH_SHORT).show();
+            sendRequest(queue, urlLamp, "KEY_BLUE");
         });
+
     }
     @Override
     protected void onResume(){
