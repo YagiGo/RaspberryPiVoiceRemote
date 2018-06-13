@@ -6,11 +6,32 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 
-public class UDPPacket implements Runnable {
-    public String ipAddr;
+public class ServerIPLinster implements Runnable {
+    private String ipAddr;
+    private boolean hasIP = false;
+    private static ServerIPLinster instance = null;
+
+    private void IPAddr() { }
+    public static synchronized ServerIPLinster getInstance() {
+        if(instance == null) {
+            instance = new ServerIPLinster();
+        }
+        return instance;
+    }
+
+    public void start_listening() {
+        new Thread(this).start(); //Start listening to broadcast!
+    }
+
+    public String getServerIP() {
+        return ipAddr;
+    }
+
+    public boolean hasServerIP() {
+        return hasIP;
+    }
+
     @Override
     public void run() {
         boolean run = true;
@@ -26,16 +47,12 @@ public class UDPPacket implements Runnable {
                 udpSocket.receive(packet);
                 String text = new String(message, 0, packet.getLength());
                 Log.d("Received data", text);
-                IPAddr.getInstance().ipAddr = text;
-                IPAddr.getInstance().ipGot = true;
+                this.ipAddr = text;
+                this.hasIP = true;
             }
+        } catch (IOException e) {
+            Log.e("IOException", "error: ", e);
+            run = false;
         }
-
-        catch (IOException e) {
-                Log.e("IOException", "error: ", e);
-                run = false;
-            }
     }
-
-    public String getIpAddr() {return ipAddr;}
 }

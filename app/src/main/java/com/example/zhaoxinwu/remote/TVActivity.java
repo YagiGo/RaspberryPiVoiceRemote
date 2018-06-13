@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 
 public class TVActivity extends AppCompatActivity {
     Context context;
-    private String urlTV = "http://192.168.0.3:5000/remote/pioneer.tv/";
+    private String urlTV = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000/remote/pioneer.tv/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final RequestQueue queue = Volley.newRequestQueue(this);

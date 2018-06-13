@@ -32,7 +32,7 @@ public class ACActivity extends AppCompatActivity {
     private Integer windDirectionIndicator = 0, windSpeedIndicator = 0, modeIndicator = 0;
     private Boolean timerOn = false;
     private Double userTimer, initTimer = 0.5;
-    private String urlAC = "http://192.168.0.3:5000//"; // I don't know yet.
+    private String urlAC = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000//"; // I don't know yet.
     Context context;
 
     @Override

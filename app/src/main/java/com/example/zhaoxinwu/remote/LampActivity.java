@@ -31,7 +31,6 @@ public class LampActivity extends AppCompatActivity {
         ImageButton buttonBrightlessDOWN = findViewById(R.id.button_lamp_decrease_brightless);
         Button buttonWarmLight = findViewById(R.id.button_lamp_warm);
         Button buttonColdLight = findViewById(R.id.button_lamp_cold);
-        final String urlLamp = "http://192.168.0.3:5000/remote/iris_oyama.light/";
 
         buttonPower.setOnClickListener(new View.OnClickListener() {
             @Override
