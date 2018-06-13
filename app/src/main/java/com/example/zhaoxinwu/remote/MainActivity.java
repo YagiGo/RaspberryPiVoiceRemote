@@ -1,23 +1,34 @@
 package com.example.zhaoxinwu.remote;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
+    Context context;
+    public String ipAddr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageButton tvRemoteSwitch = (ImageButton) findViewById(R.id.button_tv_remote);
+        context = getApplicationContext();
+        Toast.makeText(context,"Searching for raspberry...", Toast.LENGTH_SHORT);
+        new Thread(new UDPPacket()).start(); //Start listening to broadcast!
+        while(!IPAddr.getInstance().ipGot) {
+            ipAddr = IPAddr.getInstance().ipAddr;
+        }
+        ImageButton tvRemoteSwitch = findViewById(R.id.button_tv_remote);
         tvRemoteSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), TVActivity.class);
+                intent.putExtra("IP_ADDR", ipAddr);
                 startActivity(intent);
             }
         });
@@ -27,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LampActivity.class);
+                intent.putExtra("IP_ADDR", ipAddr);
                 startActivity(intent);
             }
         });
@@ -36,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ACActivity.class);
+                intent.putExtra("IP_ADDR", ipAddr);
                 startActivity(intent);
             }
         });
+        Log.i("MAIN ACTIVITY", ipAddr);
     }
     @Override
     protected void onResume(){
