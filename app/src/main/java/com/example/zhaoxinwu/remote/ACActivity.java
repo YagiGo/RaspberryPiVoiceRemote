@@ -11,21 +11,28 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import static java.lang.Double.valueOf;
 
 public class ACActivity extends AppCompatActivity {
     private TextView mACTemp, mRoomTemp, mWindSpeed, mWindDirection, mTimer, mMode;
     private Integer userTemp, initTemp = 26;
-    private Double userTimer;
     private String[] modeAC = {"AUTO", "COOL", "HEAT", "DRY", "FAN"};
-    private Integer[] modeACColorIndicator = {Color.BLACK, Color.BLUE, Color.RED, Color.argb(255,194,120,7), Color.DKGRAY};
+    private Integer[] modeACColorIndicator = {Color.BLACK, Color.BLUE, Color.RED,
+            /* Dark Yellow, 'cause the standard yellow color is a piece of shxt */
+            Color.argb(255,194,120,7),
+            Color.DKGRAY};
     private String[] windDirection = {"AUTO", "TEST1", "TEST2", "TEST3", "TEST4"};
     private String[] windSpeed = {"AUTO", "LOW", "MEDIUM", "HIGH"};
-    private Integer windDirectionIndicator = 0;
-    private Integer windSpeedIndicator = 0;
-    private Integer modeIndicator = 0;
+    private Integer windDirectionIndicator = 0, windSpeedIndicator = 0, modeIndicator = 0;
     private Boolean timerOn = false;
-    private Double initTimer = 0.5;
+    private Double userTimer, initTimer = 0.5;
+    private String urlAC = "http://192.168.0.3:5000//"; // I don't know yet.
     Context context;
 
     @Override
@@ -113,7 +120,8 @@ public class ACActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* Do something with the wind speed setting */
-                Toast.makeText(context, "Will adjust the wind speed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Will adjust the wind speed", Toast.LENGTH_SHORT)
+                        .show();
                 windSpeedIndicator = (windSpeedIndicator + 1) % 4;
                 mWindSpeed.setText(windSpeed[windSpeedIndicator]);
                 mWindSpeed.setTextColor(Color.GREEN);
@@ -124,7 +132,8 @@ public class ACActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* Do something with the wind direction setting */
-                Toast.makeText(context, "Will adjust the wind direction", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Will adjust the wind direction", Toast.LENGTH_SHORT)
+                        .show();
                 windDirectionIndicator = (windDirectionIndicator + 1) % 5;
                 mWindDirection.setText(windDirection[windDirectionIndicator]);
                 mWindDirection.setTextColor(Color.BLUE);
@@ -138,5 +147,23 @@ public class ACActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+    }
+    public void sendRequest(RequestQueue queue, String url, String param) {
+        StringRequest putRequest = new StringRequest(Request.Method.PUT,
+                url+param,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("RESPONSE", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERROR",error.toString());
+                    }
+                });
+
+        queue.add(putRequest);
     }
 }
