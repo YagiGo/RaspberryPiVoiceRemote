@@ -140,14 +140,19 @@ public class ACActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onResume(){
+        ServerIPLinster.getInstance().start_listening();
         super.onResume();
     }
+
     @Override
     protected void onPause(){
+        ServerIPLinster.getInstance().stop_listening();
         super.onPause();
     }
+
     public void sendRequest(RequestQueue queue, String url, String param) {
         StringRequest putRequest = new StringRequest(Request.Method.PUT,
                 url+param,

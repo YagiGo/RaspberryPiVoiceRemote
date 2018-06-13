@@ -11,6 +11,7 @@ public class ServerIPLinster implements Runnable {
     private String ipAddr;
     private boolean hasIP = false;
     private static ServerIPLinster instance = null;
+    private Thread threadHandler = null;
 
     private void ServerIPLinster() { }
     public static synchronized ServerIPLinster getInstance() {
@@ -21,7 +22,12 @@ public class ServerIPLinster implements Runnable {
     }
 
     public void start_listening() {
-        new Thread(this).start(); //Start listening to broadcast!
+        threadHandler = new Thread(this);
+        threadHandler.start();//Start listening to broadcast!
+    }
+
+    public void stop_listening() {
+        threadHandler.interrupt();
     }
 
     public String getServerIP() {
