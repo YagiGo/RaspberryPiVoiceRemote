@@ -12,7 +12,7 @@ public class ServerIPLinster implements Runnable {
     private boolean hasIP = false;
     private static ServerIPLinster instance = null;
 
-    private void IPAddr() { }
+    private void ServerIPLinster() { }
     public static synchronized ServerIPLinster getInstance() {
         if(instance == null) {
             instance = new ServerIPLinster();
