@@ -98,28 +98,28 @@ public class TVActivity extends AppCompatActivity {
         buttonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Back to previous channel", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Left!", Toast.LENGTH_SHORT).show();
                 sendRequest(queue, urlTV, "KEY_LEFT");
             }
         });
         buttonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Next channel", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Right!", Toast.LENGTH_SHORT).show();
                 sendRequest(queue, urlTV, "KEY_RIGHT");
             }
         });
         buttonUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Next channel", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Up!", Toast.LENGTH_SHORT).show();
                 sendRequest(queue, urlTV, "KEY_UP");
             }
         });
         buttonDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Next channel", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Down!", Toast.LENGTH_SHORT).show();
                 sendRequest(queue, urlTV, "KEY_DOWN");
             }
         });
