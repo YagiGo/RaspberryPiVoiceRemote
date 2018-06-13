@@ -1,6 +1,7 @@
 package com.example.zhaoxinwu.remote;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ public class ACActivity extends AppCompatActivity {
     private Integer userTemp, initTemp = 26;
     private Double userTimer;
     private String[] modeAC = {"AUTO", "COOL", "HEAT", "DRY", "FAN"};
+    private Integer[] modeACColorIndicator = {Color.BLACK, Color.BLUE, Color.RED, Color.argb(255,194,120,7), Color.DKGRAY};
     private String[] windDirection = {"AUTO", "TEST1", "TEST2", "TEST3", "TEST4"};
     private String[] windSpeed = {"AUTO", "LOW", "MEDIUM", "HIGH"};
     private Integer windDirectionIndicator = 0;
@@ -73,6 +75,7 @@ public class ACActivity extends AppCompatActivity {
                 Toast.makeText(context, "Change Mode", Toast.LENGTH_SHORT).show();
                 modeIndicator = (modeIndicator + 1) % 5;
                 mMode.setText(String.valueOf(modeAC[modeIndicator]));
+                mMode.setTextColor(modeACColorIndicator[modeIndicator]);
                 //Log.d("INDICATOR", String.valueOf(modeIndicator));
                 //Log.d("INDICATOR", String.valueOf(modeAC[modeIndicator]));
 
@@ -86,18 +89,21 @@ public class ACActivity extends AppCompatActivity {
                 // Toast.makeText(context, "Will set timer", Toast.LENGTH_SHORT).show();
                 if(!timerOn) {
                     mTimer.setText(String.valueOf(userTimer));
+                    mTimer.setTextColor(Color.BLUE);
                     userTimer += 0.5;
                     timerOn = true;
                 }
                 else if (timerOn) {
                     if(userTimer <= 12) {
                         mTimer.setText(String.valueOf(userTimer));
+                        mTimer.setTextColor(Color.BLUE);
                         userTimer += 0.5;
                     }
                     else {
                         timerOn = false;
                         userTimer = 0.5;
                         mTimer.setText("OFF");
+                        mTimer.setTextColor(Color.BLACK);
                     }
                 }
             }
@@ -110,6 +116,7 @@ public class ACActivity extends AppCompatActivity {
                 Toast.makeText(context, "Will adjust the wind speed", Toast.LENGTH_SHORT).show();
                 windSpeedIndicator = (windSpeedIndicator + 1) % 4;
                 mWindSpeed.setText(windSpeed[windSpeedIndicator]);
+                mWindSpeed.setTextColor(Color.GREEN);
             }
         });
 
@@ -120,6 +127,7 @@ public class ACActivity extends AppCompatActivity {
                 Toast.makeText(context, "Will adjust the wind direction", Toast.LENGTH_SHORT).show();
                 windDirectionIndicator = (windDirectionIndicator + 1) % 5;
                 mWindDirection.setText(windDirection[windDirectionIndicator]);
+                mWindDirection.setTextColor(Color.BLUE);
             }
         });
     }
