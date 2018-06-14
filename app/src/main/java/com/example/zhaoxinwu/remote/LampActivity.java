@@ -20,46 +20,62 @@ import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.concurrent.TimeUnit;
 
-public class LampActivity extends AppCompatActivity {
+import io.reactivex.disposables.CompositeDisposable;
 
+public class LampActivity extends AppCompatActivity {
     Context context;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lamp);
         context = getApplicationContext();
+
         final RequestQueue queue = Volley.newRequestQueue(this);
+        final String urlLamp = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000/remote/iris_oyama.light/";
+
         ImageButton buttonPower = findViewById(R.id.button_lamp_power);
         ImageButton buttonBrightlessUP = findViewById(R.id.button_lamp_increase_brightless);
         ImageButton buttonBrightlessDOWN = findViewById(R.id.button_lamp_decrease_brightless);
         Button buttonWarmLight = findViewById(R.id.button_lamp_warm);
         Button buttonColdLight = findViewById(R.id.button_lamp_cold);
 
-        final String urlLamp = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000/remote/iris_oyama.light/";
-        RxView.clicks(buttonPower).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
-            Toast.makeText(context, "Lamp will be powered on/off", Toast.LENGTH_SHORT).show();
-            sendRequest(queue, urlLamp, "KEY_POWER");
-        });
+        compositeDisposable.add(RxView.clicks(buttonPower)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    Toast.makeText(context, "Lamp will be powered on/off", Toast.LENGTH_SHORT).show();
+                    sendRequest(queue, urlLamp, "KEY_POWER");
+        }));
 
-        RxView.clicks(buttonBrightlessUP).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
-            Toast.makeText(context, "Lamp will be brighter", Toast.LENGTH_SHORT).show();
-            sendRequest(queue, urlLamp, "KEY_BRIGHTNESSUP");
-        });
 
-        RxView.clicks(buttonBrightlessDOWN).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
-            Toast.makeText(context, "Lamp will be dimmer", Toast.LENGTH_SHORT).show();
-            sendRequest(queue, urlLamp, "KEY_BRIGHTNESSDOWN");
-        });
+        compositeDisposable.add(RxView.clicks(buttonBrightlessUP)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    Toast.makeText(context, "Lamp will be brighter", Toast.LENGTH_SHORT).show();
+                    sendRequest(queue, urlLamp, "KEY_BRIGHTNESSUP");
+        }));
 
-        RxView.clicks(buttonWarmLight).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
-            Toast.makeText(context, "Warm Light!", Toast.LENGTH_SHORT).show();
-            sendRequest(queue, urlLamp, "KEY_RED");
-        });
+        compositeDisposable.add(RxView.clicks(buttonBrightlessDOWN)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    Toast.makeText(context, "Lamp will be dimmer", Toast.LENGTH_SHORT).show();
+                    sendRequest(queue, urlLamp, "KEY_BRIGHTNESSDOWN");
+        }));
 
-        RxView.clicks(buttonColdLight).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(empty -> {
-            Toast.makeText(context, "Cold Light", Toast.LENGTH_SHORT).show();
-            sendRequest(queue, urlLamp, "KEY_BLUE");
-        });
+        compositeDisposable.add(RxView.clicks(buttonWarmLight)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    Toast.makeText(context, "Warm Light!", Toast.LENGTH_SHORT).show();
+                    sendRequest(queue, urlLamp, "KEY_RED");
+        }));
+
+        compositeDisposable.add(RxView.clicks(buttonColdLight)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    Toast.makeText(context, "Cold Light", Toast.LENGTH_SHORT).show();
+                    sendRequest(queue, urlLamp, "KEY_BLUE");
+        }));
 
     }
     @Override
@@ -72,6 +88,13 @@ public class LampActivity extends AppCompatActivity {
     protected void onPause(){
         ServerIPLinster.getInstance().stop_listening();
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy(){
+        compositeDisposable.dispose();
+        ServerIPLinster.getInstance().stop_listening();
+        super.onDestroy();
     }
 
     public void sendRequest(RequestQueue queue, String url, String param) {
