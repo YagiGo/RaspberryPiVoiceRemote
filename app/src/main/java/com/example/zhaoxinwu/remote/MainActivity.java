@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Log.i("MAIN ACTIVITY", ipAddr);
     }
     @Override
     protected void onResume(){

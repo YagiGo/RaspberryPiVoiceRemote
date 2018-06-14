@@ -15,105 +15,93 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.Double.valueOf;
 
 public class ACActivity extends AppCompatActivity {
-    private TextView mACTemp, mRoomTemp, mWindSpeed, mWindDirection, mTimer, mMode;
+    private TextView mACTemp, mRoomTemp, mWindSpeed, mWindDirection, mPower, mMode;
+    private ACStat acstat;
     private Integer userTemp, initTemp = 26;
     private String[] modeAC = {"AUTO", "COOL", "HEAT", "DRY", "FAN"};
-    private Integer[] modeACColorIndicator = {Color.BLACK, Color.BLUE, Color.RED,
-            /* Dark Yellow, 'cause the standard yellow color is a piece of shxt */
-            Color.argb(255,194,120,7),
-            Color.DKGRAY};
+
+    final Map<String, Integer> modeACColorIndicator = new HashMap();
     private String[] windDirection = {"AUTO", "TEST1", "TEST2", "TEST3", "TEST4"};
     private String[] windSpeed = {"AUTO", "LOW", "MEDIUM", "HIGH"};
     private Integer windDirectionIndicator = 0, windSpeedIndicator = 0, modeIndicator = 0;
     private Boolean timerOn = false;
     private Double userTimer, initTimer = 0.5;
-    private String ipAddr = this.getIntent().getStringExtra("IP_ADDR");
-    private String urlAC = "http://192.168.0.3:5000//"; // I don't know yet.
+    private String urlAC, ipAddr;
     private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ac);
         context = getApplicationContext();
+        final RequestQueue queue = Volley.newRequestQueue(this);
         mACTemp = findViewById(R.id.value_ac_temp);
         mRoomTemp = findViewById(R.id.value_room_temp);
         mWindSpeed = findViewById(R.id.value_ac_wind_speed);
         mWindDirection = findViewById(R.id.value_ac_wind_direction);
-        mTimer = findViewById(R.id.value_ac_timer);
+        mPower = findViewById(R.id.value_ac_power);
         mMode = findViewById(R.id.value_ac_mode);
+
         userTemp = initTemp;
         userTimer = initTimer;
+        Bundle bundle = getIntent().getExtras();
+        String ipAddr = bundle.getString("IP_ADDR");
+        urlAC = "http://" + ipAddr + ":5000" + "/ac";
+
+        modeACColorIndicator.put("cool", Color.BLUE);
+        modeACColorIndicator.put("heat", Color.RED);
+        modeACColorIndicator.put("dry", Color.YELLOW);
+
+        sendGETRequest(queue, urlAC);
+
         ImageButton buttonACTempUp = findViewById(R.id.button_ac_temp_up);
         ImageButton buttonACTempDown = findViewById(R.id.button_ac_temp_down);
         Button buttonACMode = findViewById(R.id.button_ac_mode_change);
-        Button buttonACTimer = findViewById(R.id.button_ac_timer);
+        ImageButton buttonACPower = findViewById(R.id.button_ac_power);
         Button buttonWindSpeed = findViewById(R.id.button_ac_wind_speed);
         Button buttonWindDirection = findViewById(R.id.button_ac_wind_direction);
+
+        buttonACPower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendPUTRequest(queue, urlAC, "power", "");
+            }
+        });
 
         buttonACTempUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userTemp < 30) {
-                    userTemp += 1;
-                }
-                 mACTemp.setText(String.valueOf(userTemp));
+                sendPUTRequest(queue, urlAC, "temp", "up");
             }
         });
 
         buttonACTempDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userTemp > 16) {
-                    userTemp -= 1;
-                }
-                mACTemp.setText(String.valueOf(userTemp));
+                sendPUTRequest(queue, urlAC, "temp", "down");
             }
         });
 
         buttonACMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* Do something with the mode button */
                 Toast.makeText(context, "Change Mode", Toast.LENGTH_SHORT).show();
-                modeIndicator = (modeIndicator + 1) % 5;
-                mMode.setText(String.valueOf(modeAC[modeIndicator]));
-                mMode.setTextColor(modeACColorIndicator[modeIndicator]);
-                //Log.d("INDICATOR", String.valueOf(modeIndicator));
-                //Log.d("INDICATOR", String.valueOf(modeAC[modeIndicator]));
-
-            }
-        });
-
-        buttonACTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* Do Something with the timer */
-                // Toast.makeText(context, "Will set timer", Toast.LENGTH_SHORT).show();
-                if(!timerOn) {
-                    mTimer.setText(String.valueOf(userTimer));
-                    mTimer.setTextColor(Color.BLUE);
-                    userTimer += 0.5;
-                    timerOn = true;
-                }
-                else if (timerOn) {
-                    if(userTimer <= 12) {
-                        mTimer.setText(String.valueOf(userTimer));
-                        mTimer.setTextColor(Color.BLUE);
-                        userTimer += 0.5;
-                    }
-                    else {
-                        timerOn = false;
-                        userTimer = 0.5;
-                        mTimer.setText("OFF");
-                        mTimer.setTextColor(Color.BLACK);
-                    }
-                }
+                sendPUTRequest(queue, urlAC, "mode", "");
             }
         });
 
@@ -123,9 +111,8 @@ public class ACActivity extends AppCompatActivity {
                 /* Do something with the wind speed setting */
                 Toast.makeText(context, "Will adjust the wind speed", Toast.LENGTH_SHORT)
                         .show();
-                windSpeedIndicator = (windSpeedIndicator + 1) % 4;
-                mWindSpeed.setText(windSpeed[windSpeedIndicator]);
-                mWindSpeed.setTextColor(Color.GREEN);
+                sendPUTRequest(queue, urlAC, "speed", "");
+
             }
         });
 
@@ -135,9 +122,8 @@ public class ACActivity extends AppCompatActivity {
                 /* Do something with the wind direction setting */
                 Toast.makeText(context, "Will adjust the wind direction", Toast.LENGTH_SHORT)
                         .show();
-                windDirectionIndicator = (windDirectionIndicator + 1) % 5;
-                mWindDirection.setText(windDirection[windDirectionIndicator]);
-                mWindDirection.setTextColor(Color.BLUE);
+                sendPUTRequest(queue, urlAC, "dir", "");
+
             }
         });
     }
@@ -149,22 +135,72 @@ public class ACActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
     }
-    public void sendRequest(RequestQueue queue, String url, String param) {
-        StringRequest putRequest = new StringRequest(Request.Method.PUT,
-                url+param,
-                new Response.Listener<String>() {
+    private void updateInfoText() {
+        mACTemp.setText(acstat.temp);
+        mRoomTemp.setText(acstat.temp);
+        mWindSpeed.setText(acstat.speed);
+        mWindDirection.setText(acstat.dir);
+        mMode.setText(acstat.mode);
+        mPower.setText(acstat.power);
+
+        mWindSpeed.setTextColor(Color.GREEN);
+        mMode.setTextColor(modeACColorIndicator.get(acstat.mode));
+        mWindDirection.setTextColor(Color.BLUE);
+        return;
+    }
+
+    public void sendGETRequest(RequestQueue queue, String url) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (response != null) {
+                    Gson gson = new Gson();
+                    acstat = gson.fromJson(response.toString(), ACStat.class);
+                    updateInfoText();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("LOG", error.toString());
+            }
+        });
+
+        queue.add(jsonObjectRequest);
+    }
+
+    public void sendPUTRequest(RequestQueue queue, String url, String name, String param) {
+        final Map<String, String> params = new HashMap();
+        params.put(name, param);
+
+        StringRequest strRequest = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>()
+                {
                     @Override
-                    public void onResponse(String response) {
-                        Log.d("RESPONSE", response);
+                    public void onResponse(String response)
+                    {
+                        Gson gson = new Gson();
+                        acstat = gson.fromJson(response, ACStat.class);
+                        updateInfoText();
                     }
                 },
-                new Response.ErrorListener() {
+                new Response.ErrorListener()
+                {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("ERROR",error.toString());
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
 
-        queue.add(putRequest);
+        queue.add(strRequest);
     }
 }

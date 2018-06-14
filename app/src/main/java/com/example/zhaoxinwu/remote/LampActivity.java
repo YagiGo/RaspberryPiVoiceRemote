@@ -20,12 +20,15 @@ import com.android.volley.toolbox.Volley;
 public class LampActivity extends AppCompatActivity {
 
     private Context context;
-    private String ipAddr = this.getIntent().getStringExtra("IP_ADDR");
-    private String urlLamp = "http://192.168.0.3:5000/remote/iris_oyama.light/";
+    private String ipAddr, urlLamp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lamp);
+        Bundle bundle = getIntent().getExtras();
+        ipAddr = bundle.getString("IP_ADDR");
+        urlLamp = "http://" + ipAddr + ":5000" + "/remote/iris_oyama.light/";
+
         Log.i("LAMP ACTIVITY", ipAddr); // To see the address has been transferred correctly
         context = getApplicationContext();
         final RequestQueue queue = Volley.newRequestQueue(this);
