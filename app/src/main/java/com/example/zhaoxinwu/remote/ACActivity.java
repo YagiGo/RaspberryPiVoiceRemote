@@ -20,7 +20,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -31,17 +30,8 @@ import static java.lang.Double.valueOf;
 public class ACActivity extends AppCompatActivity {
     private TextView mACTemp, mRoomTemp, mWindSpeed, mWindDirection, mPower, mMode;
     private ACStat acstat;
-    private Integer userTemp, initTemp = 26;
-    private String[] modeAC = {"AUTO", "COOL", "HEAT", "DRY", "FAN"};
-
     final Map<String, Integer> modeACColorIndicator = new HashMap();
-    private String[] windDirection = {"AUTO", "TEST1", "TEST2", "TEST3", "TEST4"};
-    private String[] windSpeed = {"AUTO", "LOW", "MEDIUM", "HIGH"};
-    private Integer windDirectionIndicator = 0, windSpeedIndicator = 0, modeIndicator = 0;
-    private Boolean timerOn = false;
-    private Double userTimer, initTimer = 0.5;
 
-    private String urlAC = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000/ac";
     Context context;
 
     @Override
@@ -49,8 +39,10 @@ public class ACActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ac);
         context = getApplicationContext();
+
         final RequestQueue queue = Volley.newRequestQueue(this);
         String urlAC = "http://" + ServerIPListener.getInstance().getServerIP() + ":5000/ac";
+
         mACTemp = findViewById(R.id.value_ac_temp);
         mRoomTemp = findViewById(R.id.value_room_temp);
         mWindSpeed = findViewById(R.id.value_ac_wind_speed);
@@ -58,8 +50,6 @@ public class ACActivity extends AppCompatActivity {
         mPower = findViewById(R.id.value_ac_power);
         mMode = findViewById(R.id.value_ac_mode);
 
-        userTemp = initTemp;
-        userTimer = initTimer;
 
         modeACColorIndicator.put("cool", Color.BLUE);
         modeACColorIndicator.put("heat", Color.RED);
