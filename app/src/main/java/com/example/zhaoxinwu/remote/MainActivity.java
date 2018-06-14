@@ -18,11 +18,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        Toast.makeText(context,"Searching for raspberry...", Toast.LENGTH_SHORT);
+        Toast.makeText(context,"Searching for berry...", Toast.LENGTH_SHORT).show();// change to dialog
         new Thread(new UDPPacket()).start(); //Start listening to broadcast!
         while(!IPAddr.getInstance().ipGot) {
-            ipAddr = IPAddr.getInstance().ipAddr;
+            ipAddr = IPAddr.getInstance().ipAddr;// Use singleton to get ip address derived from the broadcast
         }
+        Toast.makeText(context,"Berry Connected on " + ipAddr, Toast.LENGTH_SHORT).show();
         ImageButton tvRemoteSwitch = findViewById(R.id.button_tv_remote);
         tvRemoteSwitch.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,8 +1,7 @@
 package com.example.zhaoxinwu.remote;
 
 /*
- * Linux command to send UDP:
- * #socat - UDP-DATAGRAM:192.168.96.255:11111,broadcast,sp=11111
+ * Create a singleton for storing IP data derived from UDP broadcast
  */
 public class IPAddr {
     public String ipAddr;

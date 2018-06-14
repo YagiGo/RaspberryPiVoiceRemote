@@ -19,11 +19,14 @@ import com.android.volley.toolbox.Volley;
 
 public class LampActivity extends AppCompatActivity {
 
-    Context context;
+    private Context context;
+    private String ipAddr = this.getIntent().getStringExtra("IP_ADDR");
+    private String urlLamp = "http://192.168.0.3:5000/remote/iris_oyama.light/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lamp);
+        Log.i("LAMP ACTIVITY", ipAddr); // To see the address has been transferred correctly
         context = getApplicationContext();
         final RequestQueue queue = Volley.newRequestQueue(this);
         ImageButton buttonPower = findViewById(R.id.button_lamp_power);
@@ -31,7 +34,6 @@ public class LampActivity extends AppCompatActivity {
         ImageButton buttonBrightlessDOWN = findViewById(R.id.button_lamp_decrease_brightless);
         Button buttonWarmLight = findViewById(R.id.button_lamp_warm);
         Button buttonColdLight = findViewById(R.id.button_lamp_cold);
-        final String urlLamp = "http://192.168.0.3:5000/remote/iris_oyama.light/";
 
         buttonPower.setOnClickListener(new View.OnClickListener() {
             @Override

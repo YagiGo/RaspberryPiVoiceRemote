@@ -6,11 +6,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+
 
 public class UDPPacket implements Runnable {
-    public String ipAddr;
     @Override
     public void run() {
         boolean run = true;
@@ -36,6 +34,4 @@ public class UDPPacket implements Runnable {
                 run = false;
             }
     }
-
-    public String getIpAddr() {return ipAddr;}
 }

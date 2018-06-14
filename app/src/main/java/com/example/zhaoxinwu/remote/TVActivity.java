@@ -17,7 +17,8 @@ import com.android.volley.toolbox.Volley;
 
 
 public class TVActivity extends AppCompatActivity {
-    Context context;
+    private Context context;
+    private String ipAddr = this.getIntent().getStringExtra("IP_ADDR");
     private String urlTV = "http://192.168.0.3:5000/remote/pioneer.tv/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
