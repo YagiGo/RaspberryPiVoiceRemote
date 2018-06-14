@@ -26,6 +26,7 @@ public class UDPPacket implements Runnable {
                 Log.d("Received data", text);
                 IPAddr.getInstance().ipAddr = text;
                 IPAddr.getInstance().ipGot = true;
+                run = false;
             }
         }
 

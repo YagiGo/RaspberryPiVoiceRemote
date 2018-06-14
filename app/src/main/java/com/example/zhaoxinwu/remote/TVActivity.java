@@ -18,14 +18,18 @@ import com.android.volley.toolbox.Volley;
 
 public class TVActivity extends AppCompatActivity {
     private Context context;
-    private String ipAddr = this.getIntent().getStringExtra("IP_ADDR");
-    private String urlTV = "http://192.168.0.3:5000/remote/pioneer.tv/";
+    // private String ipAddr = this.getIntent().getStringExtra("IP_ADDR");
+    private String ipAddr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final RequestQueue queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv);
         context = getApplicationContext();
+        Bundle bundle = getIntent().getExtras();
+        ipAddr = bundle.getString("IP_ADDR");
+        Log.i("TV ACTIVITY", ipAddr);
+        final String urlTV = "http://" + ipAddr + ":5000" + "/remote/pioneer.tv/";
         ImageButton buttonPower = findViewById(R.id.button_tv_power_off);
         ImageButton buttonMute = findViewById(R.id.button_tv_mute);
         ImageButton buttonMenu = findViewById(R.id.button_tv_menu);

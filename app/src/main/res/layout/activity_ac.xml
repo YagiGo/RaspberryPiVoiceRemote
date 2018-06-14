@@ -69,7 +69,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/button_ac_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -107,7 +107,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageButton2"
+        app:layout_constraintStart_toEndOf="@+id/button_ac_power"
         app:layout_constraintTop_toTopOf="@+id/button_ac_temp_up"
         app:layout_constraintVertical_bias="0.165" />
 
@@ -121,7 +121,7 @@
         android:layout_marginTop="8dp"
         android:text="Timer"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/button_ac_power"
         app:layout_constraintHorizontal_bias="0.984"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button_ac_temp_up"
@@ -134,7 +134,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+        app:layout_constraintBottom_toTopOf="@+id/button_ac_power"
         app:layout_constraintEnd_toEndOf="@+id/button_ac_mode_change"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="@+id/button_ac_timer"
@@ -154,7 +154,7 @@
         app:layout_constraintEnd_toEndOf="@+id/button_ac_mode_change"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="@+id/button_ac_timer"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
+        app:layout_constraintTop_toBottomOf="@+id/button_ac_power"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_minus" />
 
@@ -202,7 +202,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Timer:"
+        android:text="Power:"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tag_wind_direction" />
@@ -219,7 +219,7 @@
         app:layout_constraintTop_toBottomOf="@+id/value_ac_temp" />
 
     <TextView
-        android:id="@+id/value_ac_timer"
+        android:id="@+id/value_ac_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="316dp"
