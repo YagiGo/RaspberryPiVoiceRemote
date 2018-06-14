@@ -36,8 +36,8 @@ public class LampActivity extends AppCompatActivity {
         final String urlLamp = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000/remote/iris_oyama.light/";
 
         ImageButton buttonPower = findViewById(R.id.button_lamp_power);
-        ImageButton buttonBrightlessUP = findViewById(R.id.button_lamp_increase_brightless);
-        ImageButton buttonBrightlessDOWN = findViewById(R.id.button_lamp_decrease_brightless);
+        ImageButton buttonBrightnessUP = findViewById(R.id.button_lamp_increase_brightless);
+        ImageButton buttonBrightnessDOWN = findViewById(R.id.button_lamp_decrease_brightless);
         Button buttonWarmLight = findViewById(R.id.button_lamp_warm);
         Button buttonColdLight = findViewById(R.id.button_lamp_cold);
 
@@ -49,14 +49,14 @@ public class LampActivity extends AppCompatActivity {
         }));
 
 
-        compositeDisposable.add(RxView.clicks(buttonBrightlessUP)
+        compositeDisposable.add(RxView.clicks(buttonBrightnessUP)
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .subscribe(empty -> {
                     Toast.makeText(context, "Lamp will be brighter", Toast.LENGTH_SHORT).show();
                     sendRequest(queue, urlLamp, "KEY_BRIGHTNESSUP");
         }));
 
-        compositeDisposable.add(RxView.clicks(buttonBrightlessDOWN)
+        compositeDisposable.add(RxView.clicks(buttonBrightnessDOWN)
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .subscribe(empty -> {
                     Toast.makeText(context, "Lamp will be dimmer", Toast.LENGTH_SHORT).show();
@@ -100,19 +100,12 @@ public class LampActivity extends AppCompatActivity {
     public void sendRequest(RequestQueue queue, String url, String param) {
         StringRequest putRequest = new StringRequest(Request.Method.PUT,
                 url+param,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                (String response) -> {
                         Log.d("RESPONSE", response);
-                    }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                (VolleyError error) -> {
                         Log.d("ERROR",error.toString());
-                    }
                 });
-
         queue.add(putRequest);
     }
 }
