@@ -23,16 +23,17 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class TVActivity extends AppCompatActivity {
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-
     Context context;
-    private String urlTV = "http://" + ServerIPListener.getInstance().getServerIP() + ":5000/remote/pioneer.tv/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final RequestQueue queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv);
         context = getApplicationContext();
+
+        final RequestQueue queue = Volley.newRequestQueue(this);
+        String urlTV = "http://" + ServerIPListener.getInstance().getServerIP() + ":5000/remote/pioneer.tv/";
+
         ImageButton buttonPower = findViewById(R.id.button_tv_power_off);
         ImageButton buttonMute = findViewById(R.id.button_tv_mute);
         ImageButton buttonMenu = findViewById(R.id.button_tv_menu);
@@ -116,20 +117,13 @@ public class TVActivity extends AppCompatActivity {
 
     public void sendRequest(RequestQueue queue, String url, String param) {
         StringRequest putRequest = new StringRequest(Request.Method.PUT,
-                url+param,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                url + param,
+                (String response) -> {
                         Log.d("RESPONSE", response);
-                    }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                (VolleyError error) -> {
                         Log.d("ERROR",error.toString());
-                    }
         });
-
         queue.add(putRequest);
     }
 

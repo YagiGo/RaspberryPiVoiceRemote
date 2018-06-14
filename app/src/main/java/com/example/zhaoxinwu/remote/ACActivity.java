@@ -35,9 +35,8 @@ public class ACActivity extends AppCompatActivity {
     private TextView mACTemp, mRoomTemp, mWindSpeed, mWindDirection, mPower, mMode;
     private ACStat acstat;
     final Map<String, Integer> modeACColorIndicator = new HashMap();
+
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-
     Context context;
 
     @Override
@@ -137,24 +136,16 @@ public class ACActivity extends AppCompatActivity {
     }
 
     public void sendGETRequest(RequestQueue queue, String url) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                if (response != null) {
+        StringRequest strRequest = new StringRequest(Request.Method.GET, url,
+                (String response) -> {
                     Gson gson = new Gson();
-                    acstat = gson.fromJson(response.toString(), ACStat.class);
+                    acstat = gson.fromJson(response, ACStat.class);
                     updateInfoText();
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("LOG", error.toString());
-            }
-        });
-
-        queue.add(jsonObjectRequest);
+                },
+                (VolleyError error) -> {
+                    Log.e("LOG", error.toString());
+                });
+        queue.add(strRequest);
     }
 
     public void sendPUTRequest(RequestQueue queue, String url, String name, String param) {
@@ -162,31 +153,21 @@ public class ACActivity extends AppCompatActivity {
         params.put(name, param);
 
         StringRequest strRequest = new StringRequest(Request.Method.PUT, url,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response)
-                    {
-                        Gson gson = new Gson();
-                        acstat = gson.fromJson(response, ACStat.class);
-                        updateInfoText();
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                })
-        {
-            @Override
-            protected Map<String, String> getParams()
+            (String response) -> {
+                Gson gson = new Gson();
+                acstat = gson.fromJson(response, ACStat.class);
+                updateInfoText();
+            },
+           (VolleyError error) -> {
+               Log.e("LOG", error.toString());
+            })
             {
-                return params;
-            }
-        };
+                @Override
+                protected Map<String, String> getParams()
+                {
+                    return params;
+                }
+            };
 
         queue.add(strRequest);
     }

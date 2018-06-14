@@ -52,30 +52,21 @@ public class MainActivity extends AppCompatActivity {
             while(!ServerIPListener.getInstance().hasServerIP()) { }
 
             ImageButton tvRemoteSwitch = findViewById(R.id.button_tv_remote);
-            tvRemoteSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            tvRemoteSwitch.setOnClickListener((View v) -> {
                     Intent intent = new Intent(getApplicationContext(), TVActivity.class);
                     startActivity(intent);
-                }
             });
 
             ImageButton lampRemoteSwitch = findViewById(R.id.button_lamp_remote);
-            lampRemoteSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            lampRemoteSwitch.setOnClickListener((View v) -> {
                     Intent intent = new Intent(getApplicationContext(), LampActivity.class);
                     startActivity(intent);
-                }
             });
 
             ImageButton acRemoteSwitch = findViewById(R.id.button_ac_remote);
-            acRemoteSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            acRemoteSwitch.setOnClickListener((View v) -> {
                     Intent intent = new Intent(getApplicationContext(), ACActivity.class);
                     startActivity(intent);
-                }
             });
             Log.i("MAIN ACTIVITY", ServerIPListener.getInstance().getServerIP());
         }
