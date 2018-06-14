@@ -59,9 +59,7 @@ public class ACActivity extends AppCompatActivity {
 
         userTemp = initTemp;
         userTimer = initTimer;
-        Bundle bundle = getIntent().getExtras();
-        String ipAddr = bundle.getString("IP_ADDR");
-        urlAC = "http://" + ipAddr + ":5000" + "/ac";
+        urlAC = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000" + "/ac";
 
         modeACColorIndicator.put("cool", Color.BLUE);
         modeACColorIndicator.put("heat", Color.RED);
