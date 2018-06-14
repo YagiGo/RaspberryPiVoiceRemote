@@ -19,11 +19,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 import static java.lang.Double.valueOf;
 
@@ -31,6 +35,8 @@ public class ACActivity extends AppCompatActivity {
     private TextView mACTemp, mRoomTemp, mWindSpeed, mWindDirection, mPower, mMode;
     private ACStat acstat;
     final Map<String, Integer> modeACColorIndicator = new HashMap();
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
 
     Context context;
 
@@ -50,7 +56,6 @@ public class ACActivity extends AppCompatActivity {
         mPower = findViewById(R.id.value_ac_power);
         mMode = findViewById(R.id.value_ac_mode);
 
-
         modeACColorIndicator.put("cool", Color.BLUE);
         modeACColorIndicator.put("heat", Color.RED);
         modeACColorIndicator.put("dry", Color.YELLOW);
@@ -64,56 +69,41 @@ public class ACActivity extends AppCompatActivity {
         Button buttonWindSpeed = findViewById(R.id.button_ac_wind_speed);
         Button buttonWindDirection = findViewById(R.id.button_ac_wind_direction);
 
-        buttonACPower.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendPUTRequest(queue, urlAC, "power", "");
-            }
-        });
+        compositeDisposable.add(RxView.clicks(buttonACPower)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendPUTRequest(queue, urlAC, "power", "");
+                }));
 
-        buttonACTempUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendPUTRequest(queue, urlAC, "temp", "up");
-            }
-        });
+        compositeDisposable.add(RxView.clicks(buttonACTempUp)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendPUTRequest(queue, urlAC, "temp", "up");
+                }));
 
-        buttonACTempDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendPUTRequest(queue, urlAC, "temp", "down");
-            }
-        });
+        compositeDisposable.add(RxView.clicks(buttonACTempDown)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendPUTRequest(queue, urlAC, "temp", "down");
+                }));
 
-        buttonACMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Change Mode", Toast.LENGTH_SHORT).show();
-                sendPUTRequest(queue, urlAC, "mode", "");
-            }
-        });
+        compositeDisposable.add(RxView.clicks(buttonACMode)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendPUTRequest(queue, urlAC, "mode", "");
+                }));
 
-        buttonWindDirection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* Do something with the wind speed setting */
-                Toast.makeText(context, "Will adjust the wind speed", Toast.LENGTH_SHORT)
-                        .show();
-                sendPUTRequest(queue, urlAC, "speed", "");
+        compositeDisposable.add(RxView.clicks(buttonWindSpeed)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendPUTRequest(queue, urlAC, "speed", "");
+                }));
 
-            }
-        });
-
-        buttonWindSpeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* Do something with the wind direction setting */
-                Toast.makeText(context, "Will adjust the wind direction", Toast.LENGTH_SHORT)
-                        .show();
-                sendPUTRequest(queue, urlAC, "dir", "");
-
-            }
-        });
+        compositeDisposable.add(RxView.clicks(buttonWindDirection)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendPUTRequest(queue, urlAC, "dir", "");
+                }));
     }
 
     @Override
@@ -124,6 +114,12 @@ public class ACActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy(){
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     private void updateInfoText() {

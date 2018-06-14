@@ -88,7 +88,6 @@ public class LampActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         compositeDisposable.dispose();
-        ServerIPListener.getInstance().stop_listening();
         super.onDestroy();
     }
 

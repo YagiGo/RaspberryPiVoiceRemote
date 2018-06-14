@@ -14,9 +14,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.jakewharton.rxbinding2.view.RxView;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 
 public class TVActivity extends AppCompatActivity {
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+
     Context context;
     private String urlTV = "http://" + ServerIPListener.getInstance().getServerIP() + ":5000/remote/pioneer.tv/";
     @Override
@@ -35,95 +43,59 @@ public class TVActivity extends AppCompatActivity {
         ImageButton buttonUp = findViewById(R.id.button_tv_up);
         ImageButton buttonDown = findViewById(R.id.button_tv_down);
 
-        buttonPower.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "TV will be powered on/off", Toast.LENGTH_SHORT).show();
-                /*
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, urlTV,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Log.d("Response", response.substring(0, 500));
-                            }
-                        },
+        compositeDisposable.add(RxView.clicks(buttonPower)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_POWER");
+                }));
 
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("Didn","Didn;t work");
-                            }
-                        }
-                );
-                queue.add(stringRequest);
-                */
-                sendRequest(queue, urlTV, "KEY_POWER");
+        compositeDisposable.add(RxView.clicks(buttonMute)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_MUTE");
+                }));
 
-            }
-        });
+        compositeDisposable.add(RxView.clicks(buttonMenu)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_MENU");
+                }));
 
-        buttonMute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "TV will be muted", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_MUTE");
+        compositeDisposable.add(RxView.clicks(buttonVolumeUp)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_VOLUMEUP");
+                }));
 
+        compositeDisposable.add(RxView.clicks(buttonVolumeDown)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_VOLUMEDOWN");
+                }));
 
-            }
-        });
-        buttonMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "TV menu will be opened", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_MENU");
+        compositeDisposable.add(RxView.clicks(buttonUp)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_UP");
+                }));
 
-            }
-        });
-        buttonVolumeUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "TV volume will be turned up", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_VOLUMEUP");
+        compositeDisposable.add(RxView.clicks(buttonLeft)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_LEFT");
+                }));
 
-            }
-        });
-        buttonVolumeDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "TV volume will be turned down", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_VOLUMEDOWN");
+        compositeDisposable.add(RxView.clicks(buttonRight)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_RIGHT");
+                }));
 
-            }
-        });
-        buttonLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Left!", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_LEFT");
-            }
-        });
-        buttonRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Right!", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_RIGHT");
-            }
-        });
-        buttonUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Up!", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_UP");
-            }
-        });
-        buttonDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Down!", Toast.LENGTH_SHORT).show();
-                sendRequest(queue, urlTV, "KEY_DOWN");
-            }
-        });
-
+        compositeDisposable.add(RxView.clicks(buttonDown)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(empty -> {
+                    sendRequest(queue, urlTV, "KEY_DOWN");
+                }));
     }
 
     @Override
@@ -134,6 +106,12 @@ public class TVActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy(){
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     public void sendRequest(RequestQueue queue, String url, String param) {
