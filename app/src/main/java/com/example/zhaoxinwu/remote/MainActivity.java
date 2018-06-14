@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        Toast.makeText(context,"Searching for raspberry...", Toast.LENGTH_SHORT);
 
         if(checkWiFiConnection()) {
             ServerIPLinster.getInstance().start_listening();
