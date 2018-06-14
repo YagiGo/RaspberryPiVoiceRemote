@@ -130,13 +130,11 @@ public class ACActivity extends AppCompatActivity {
 
     @Override
     protected void onResume(){
-        ServerIPLinster.getInstance().start_listening();
         super.onResume();
     }
 
     @Override
     protected void onPause(){
-        ServerIPLinster.getInstance().stop_listening();
         super.onPause();
     }
 

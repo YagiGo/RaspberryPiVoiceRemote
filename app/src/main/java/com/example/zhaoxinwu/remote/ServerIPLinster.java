@@ -1,6 +1,8 @@
 package com.example.zhaoxinwu.remote;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
@@ -13,6 +15,8 @@ public class ServerIPLinster implements Runnable {
     private static ServerIPLinster instance = null;
     private Thread threadHandler = null;
 
+    private ProgressDialog dialog;
+
     private void ServerIPLinster() { }
     public static synchronized ServerIPLinster getInstance() {
         if(instance == null) {
@@ -21,13 +25,21 @@ public class ServerIPLinster implements Runnable {
         return instance;
     }
 
-    public void start_listening() {
-        threadHandler = new Thread(this);
-        threadHandler.start();//Start listening to broadcast!
+    public void start_listening(Context context) {
+        if(!hasIP){
+            threadHandler = new Thread(this);
+            dialog = new ProgressDialog(context);
+
+            dialog.setMessage("Connecting to Raspberry Pi");
+            dialog.show();
+            threadHandler.start();//Start listening to broadcast!
+        }
     }
 
     public void stop_listening() {
-        threadHandler.interrupt();
+        if(threadHandler != null) {
+            threadHandler.interrupt();
+        }
     }
 
     public String getServerIP() {
@@ -55,6 +67,12 @@ public class ServerIPLinster implements Runnable {
                 Log.d("Received data", text);
                 this.ipAddr = text;
                 this.hasIP = true;
+                run = false;
+                if(dialog != null){
+                    if(dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                }
             }
         } catch (IOException e) {
             Log.e("IOException", "error: ", e);

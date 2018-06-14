@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         if(checkWiFiConnection()) {
-            ServerIPLinster.getInstance().start_listening();
+            ServerIPLinster.getInstance().start_listening(this);
             while(!ServerIPLinster.getInstance().hasServerIP()) { }
 
             ImageButton tvRemoteSwitch = findViewById(R.id.button_tv_remote);
@@ -83,13 +83,11 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onResume(){
-        ServerIPLinster.getInstance().start_listening();
         super.onResume();
     }
 
     @Override
     protected void onPause(){
-        ServerIPLinster.getInstance().stop_listening();
         super.onPause();
     }
 }
