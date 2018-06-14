@@ -9,18 +9,18 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class ServerIPLinster implements Runnable {
+public class ServerIPListener implements Runnable {
     private String ipAddr;
     private boolean hasIP = false;
-    private static ServerIPLinster instance = null;
+    private static ServerIPListener instance = null;
     private Thread threadHandler = null;
 
     private ProgressDialog dialog;
 
     private void ServerIPLinster() { }
-    public static synchronized ServerIPLinster getInstance() {
+    public static synchronized ServerIPListener getInstance() {
         if(instance == null) {
-            instance = new ServerIPLinster();
+            instance = new ServerIPListener();
         }
         return instance;
     }

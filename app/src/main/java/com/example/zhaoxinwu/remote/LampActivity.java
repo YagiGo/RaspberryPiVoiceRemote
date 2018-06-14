@@ -1,18 +1,15 @@
 package com.example.zhaoxinwu.remote;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -33,7 +30,7 @@ public class LampActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String urlLamp = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000/remote/iris_oyama.light/";
+        final String urlLamp = "http://" + ServerIPListener.getInstance().getServerIP() + ":5000/remote/iris_oyama.light/";
 
         ImageButton buttonPower = findViewById(R.id.button_lamp_power);
         ImageButton buttonBrightnessUP = findViewById(R.id.button_lamp_increase_brightless);
@@ -91,7 +88,7 @@ public class LampActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         compositeDisposable.dispose();
-        ServerIPLinster.getInstance().stop_listening();
+        ServerIPListener.getInstance().stop_listening();
         super.onDestroy();
     }
 

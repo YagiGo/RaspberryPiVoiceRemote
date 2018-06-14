@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     Context context;
@@ -49,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         if(checkWiFiConnection()) {
-            ServerIPLinster.getInstance().start_listening(this);
-            while(!ServerIPLinster.getInstance().hasServerIP()) { }
+            ServerIPListener.getInstance().start_listening(this);
+            while(!ServerIPListener.getInstance().hasServerIP()) { }
 
             ImageButton tvRemoteSwitch = findViewById(R.id.button_tv_remote);
             tvRemoteSwitch.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-            Log.i("MAIN ACTIVITY", ServerIPLinster.getInstance().getServerIP());
+            Log.i("MAIN ACTIVITY", ServerIPListener.getInstance().getServerIP());
         }
     }
     @Override

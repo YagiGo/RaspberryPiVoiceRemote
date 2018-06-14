@@ -50,6 +50,7 @@ public class ACActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ac);
         context = getApplicationContext();
         final RequestQueue queue = Volley.newRequestQueue(this);
+        String urlAC = "http://" + ServerIPListener.getInstance().getServerIP() + ":5000/ac";
         mACTemp = findViewById(R.id.value_ac_temp);
         mRoomTemp = findViewById(R.id.value_room_temp);
         mWindSpeed = findViewById(R.id.value_ac_wind_speed);
@@ -59,7 +60,6 @@ public class ACActivity extends AppCompatActivity {
 
         userTemp = initTemp;
         userTimer = initTimer;
-        urlAC = "http://" + ServerIPLinster.getInstance().getServerIP() + ":5000" + "/ac";
 
         modeACColorIndicator.put("cool", Color.BLUE);
         modeACColorIndicator.put("heat", Color.RED);
