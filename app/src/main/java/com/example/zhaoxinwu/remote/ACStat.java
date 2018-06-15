@@ -6,4 +6,5 @@ public class ACStat {
     public String temp;
     public String speed;
     public String dir;
+    public String room_temp;
 }

@@ -26,13 +26,12 @@ public class ServerIPListener implements Runnable {
     }
 
     public void start_listening(Context context) {
-        if(!hasIP){
-            threadHandler = new Thread(this);
+        if(true){
+            //threadHandler = new Thread(this);
             dialog = new ProgressDialog(context);
-
             dialog.setMessage("Connecting to Raspberry Pi");
             dialog.show();
-            threadHandler.start();//Start listening to broadcast!
+            //threadHandler.start();//Start listening to broadcast!
         }
     }
 
@@ -40,6 +39,7 @@ public class ServerIPListener implements Runnable {
         if(threadHandler != null) {
             threadHandler.interrupt();
         }
+
     }
 
     public String getServerIP() {
@@ -65,12 +65,12 @@ public class ServerIPListener implements Runnable {
                 udpSocket.receive(packet);
                 String text = new String(message, 0, packet.getLength());
                 Log.d("Received data", text);
-                this.ipAddr = text;
-                this.hasIP = true;
+                ServerIPListener.getInstance().ipAddr = text;
+                ServerIPListener.getInstance().hasIP = true;
                 run = false;
-                if(dialog != null){
-                    if(dialog.isShowing()){
-                        dialog.dismiss();
+                if(ServerIPListener.getInstance().dialog != null){
+                    if(ServerIPListener.getInstance().dialog.isShowing()){
+                        ServerIPListener.getInstance().dialog.dismiss();
                     }
                 }
             }
