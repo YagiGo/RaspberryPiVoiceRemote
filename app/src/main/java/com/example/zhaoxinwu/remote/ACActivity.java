@@ -29,8 +29,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-import static java.lang.Double.valueOf;
-
 public class ACActivity extends AppCompatActivity {
     private TextView mACTemp, mRoomTemp, mWindSpeed, mWindDirection, mPower, mMode;
     private ACStat acstat;
@@ -123,7 +121,7 @@ public class ACActivity extends AppCompatActivity {
 
     private void updateInfoText() {
         mACTemp.setText(acstat.temp);
-        mRoomTemp.setText(acstat.temp);
+        mRoomTemp.setText(String.valueOf(Math.round(Double.valueOf(acstat.room_temp))));
         mWindSpeed.setText(acstat.speed);
         mWindDirection.setText(acstat.dir);
         mMode.setText(acstat.mode);
