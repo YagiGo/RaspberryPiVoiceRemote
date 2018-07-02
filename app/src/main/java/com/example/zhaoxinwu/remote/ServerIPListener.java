@@ -8,7 +8,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-
+/* ServerIPListener class, including a singleton structure
+to store IP address, and flags indicating 
+if the IP of the raspberry has been successfully received */
 public class ServerIPListener implements Runnable {
     private String ipAddr;
     private boolean hasIP = false;
@@ -49,7 +51,7 @@ public class ServerIPListener implements Runnable {
     public boolean hasServerIP() {
         return hasIP;
     }
-
+    /* Raspberry IP address listening loop here, use UDP socket to get broadcast packets */
     @Override
     public void run() {
         boolean run = true;
